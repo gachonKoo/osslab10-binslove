@@ -2,11 +2,11 @@ name: Bot Autograding Workflow
 
 on:
   push:
-    branches: ["**"]                     # 어떤 브랜치든 푸시되면 실행
+    branches: ["**"]                     # ?대뼡 釉뚮옖移섎뱺 ?몄떆?섎㈃ ?ㅽ뻾
   pull_request:
     types: [opened, synchronize, reopened]
-  repository_dispatch:                   # Classroom 훅 대응
-  workflow_dispatch:                     # 수동 실행 허용
+  repository_dispatch:                   # Classroom ?????
+  workflow_dispatch:                     # ?섎룞 ?ㅽ뻾 ?덉슜
 
 permissions:
   checks: write
@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   run-autograding-tests:
-    runs-on: ubuntu-latest               # ❌ 봇 제외 조건 제거 (스킵 방지)
+    runs-on: ubuntu-latest               # ??遊??쒖쇅 議곌굔 ?쒓굅 (?ㅽ궢 諛⑹?)
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
