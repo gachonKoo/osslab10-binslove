@@ -1,9 +1,9 @@
 name: GitHub Classroom Autograding Workflow
 
 on:
-  push:                     # ✅ 봇/사용자/웹 편집 모두 실행
+  push:
     branches: ["**"]
-  workflow_dispatch:        # 수동 실행 허용
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -20,9 +20,17 @@ jobs:
       - name: Run Autograder
         id: autograding
         uses: education/autograding@v1
-        # 기본 경로 .github/classroom/autograding.json 을 사용하므로 with: path 필요 없음
+        # .github/classroom/autograding.json 사용
+
+      # 디버그: runners 값 확인
+      - name: Debug runners output
+        run: |
+          echo "RAW RUNNERS: <<${{ steps.autograding.outputs.runners }}>>"
 
       - name: Report
+        if: ${{ always() && steps.autograding.outputs.runners != '' }}
         uses: classroom-resources/autograding-grading-reporter@v1
         with:
-          runners: ${{ join(fromJson(steps.autograding.outputs.runners), ',') }}
+          runners: ${{ startsWith(steps.autograding.outputs.runners, '[')
+            && join(fromJson(steps.autograding.outputs.runners), ',')
+            || steps.autograding.outputs.runners }}
