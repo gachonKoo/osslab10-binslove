@@ -25,4 +25,4 @@ jobs:
       - name: Report
         uses: classroom-resources/autograding-grading-reporter@v1
         with:
-          runners: ${{ steps.autograding.outputs.runners }}
+          runners: ${{ join(fromJson(steps.autograding.outputs.runners), ',') }}
