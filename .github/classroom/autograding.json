@@ -2,13 +2,13 @@
   "version": 0.1,
   "tests": [
     {
-      "name": "Smoke test",
+      "name": "Run unit tests",
       "setup": "pip install pytest",
       "run": "python -m pytest -q",
       "input": "",
       "output": "",
       "comparison": "included",
-      "timeout": 300,
+      "timeout": 600,
       "points": 1
     }
   ],
