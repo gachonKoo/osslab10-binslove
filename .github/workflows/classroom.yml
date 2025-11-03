@@ -2,30 +2,52 @@ name: Bot Autograding Workflow
 
 on:
   push:
-    branches: ["**"]
+    branches: ["**"]                     # 어떤 브랜치든 푸시되면 실행
   pull_request:
     types: [opened, synchronize, reopened]
-  workflow_dispatch:
+  repository_dispatch:                   # Classroom 훅 대응
+  workflow_dispatch:                     # 수동 실행 허용
 
 permissions:
-  contents: read
   checks: write
-  pull-requests: write
+  actions: read
+  contents: read
 
 jobs:
-  autograding:
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
-    runs-on: ubuntu-latest
+  run-autograding-tests:
+    runs-on: ubuntu-latest               # ❌ 봇 제외 조건 제거 (스킵 방지)
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run Autograder
-        id: autograding
-        uses: education/autograding@v1`n  with:`n    path: autograding.json
-
-      - name: Report
-        uses: classroom-resources/autograding-grading-reporter@v1
+      - name: test0
+        id: test0
+        uses: classroom-resources/autograding-io-grader@v1
         with:
-          runners: ${{ steps.autograding.outputs.runners }}
+          test-name: test0
+          setup-command: ""
+          command: python divisors.py 100
+          input: ""
+          expected-output: 1 2 4 5 10 20 25 50 100
+          comparison-method: contains
+          timeout: 10
 
+      - name: test1
+        id: test1
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: test1
+          setup-command: ""
+          command: python divisors.py 23
+          input: ""
+          expected-output: 1 23
+          comparison-method: contains
+          timeout: 10
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          TEST0_RESULTS: ${{ steps.test0.outputs.result }}
+          TEST1_RESULTS: ${{ steps.test1.outputs.result }}
+        with:
+          runners: test0,test1
