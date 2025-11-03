@@ -1,4 +1,4 @@
-﻿name: Bot Autograding Workflow
+name: Bot Autograding Workflow
 
 on:
   push:
@@ -22,9 +22,10 @@ jobs:
 
       - name: Run Autograder
         id: autograding
-        uses: education/autograding@v1
+        uses: education/autograding@v1`n  with:`n    path: autograding.json
 
       - name: Report
         uses: classroom-resources/autograding-grading-reporter@v1
         with:
           runners: ${{ steps.autograding.outputs.runners }}
+
